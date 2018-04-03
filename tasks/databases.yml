@@ -1,3 +1,10 @@
+# @Author: Haupt Joshua <HauptJ>
+# @Date:   02-Apr-2018
+# @Email:  josh@hauptj.com
+# @Filename: databases.yml
+# @Last modified by:   HauptJ
+# @Last modified time: 02-Apr-2018
+
 # roles/mariadb/tasks/databases.yml
 ---
 
@@ -9,7 +16,7 @@
     state: absent
   tags: mariadb
 
-- name: Create user defined databases
+- name: Create new user defined databases
   mysql_db:
     name: "{{ item.name }}"
     login_user: root
@@ -22,7 +29,7 @@
 # Below, the databases are initialised, but only when the database was created
 # in the previous step. This ensures idempotence.
 
-- name: Copy database init scripts
+- name: Copy database init scripts for existing databases
   copy:
     src: "{{ item.item.init_script }}"
     dest: "/tmp/{{ item.item.init_script|basename }}"
@@ -31,7 +38,7 @@
   when: item.changed and item.item.init_script is defined
   tags: mariadb
 
-- name: Initialise databases
+- name: Initialise existing databases
   mysql_db:
     name: "{{ item.item.name }}"
     state: import

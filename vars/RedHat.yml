@@ -1,3 +1,10 @@
+# @Author: Haupt Joshua <HauptJ>
+# @Date:   02-Apr-2018
+# @Email:  josh@hauptj.com
+# @Filename: RedHat.yml
+# @Last modified by:   HauptJ
+# @Last modified time: 02-Apr-2018
+
 # roles/mariadb/vars/RedHat.yml
 ---
 
@@ -5,6 +12,8 @@ mariadb_packages:
   - MariaDB
   - MariaDB-server
   - MySQL-python
+  - libselinux-python
+  - libsemanage-python
 
 mariadb_service: mariadb
 mariadb_socket: /var/lib/mysql/mysql.sock

@@ -1,9 +1,30 @@
+# @Author: Haupt Joshua <HauptJ>
+# @Date:   02-Apr-2018
+# @Email:  josh@hauptj.com
+# @Filename: main.yml
+# @Last modified by:   HauptJ
+# @Last modified time: 02-Apr-2018
+
 # roles/mariadb/defaults/main.yml
 ---
 
-mariadb_databases: []
-mariadb_users: []
-mariadb_root_password: ''
+# SELinux
+# State whether SELinux is disabled or enabled
+# true = disabled
+# false = enabled
+sel_disable: true
+
+# mariadb_databases: []
+mariadb_databases:
+  - name: testWP
+
+# mariadb_users: []
+mariadb_users:
+  - name: testWPuser
+    password: letmein
+    priv: 'testWP.*:ALL'
+
+mariadb_root_password: 'rootpass'
 
 mariadb_version: '10.2'
 

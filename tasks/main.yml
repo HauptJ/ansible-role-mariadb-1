@@ -1,3 +1,10 @@
+# @Author: Haupt Joshua <HauptJ>
+# @Date:   02-Apr-2018
+# @Email:  josh@hauptj.com
+# @Filename: main.yml
+# @Last modified by:   HauptJ
+# @Last modified time: 02-Apr-2018
+
 # roles/mariadb/tasks/main.yml
 ---
 
@@ -7,8 +14,22 @@
     - "{{ ansible_os_family }}.yml"
   tags: mariadb
 
-- include_tasks: install.yml
-- include_tasks: config.yml
-- include_tasks: root-password.yml
-- include_tasks: databases.yml
-- include_tasks: users.yml
+- name: Install MariaDB
+  import_tasks: install.yml
+
+- name: Configure MariaDB
+  import_tasks: config.yml
+
+- name: Set MariaDB root password
+  import_tasks: root-password.yml
+
+# NOTE: NOT YET TESTED
+- name: Configure SELinux for MariaDB
+  include_tasks: selinux.yml
+  when: sel_disable == false
+
+- name: Setup MariaDB databases
+  import_tasks: databases.yml
+
+- name: Setup MariaDB users
+  import_tasks: users.yml
