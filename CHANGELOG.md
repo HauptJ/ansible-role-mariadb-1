@@ -4,6 +4,35 @@ This file contains al notable changes to the mariadb Ansible role.
 
 This file adheres to the guidelines of <http://keepachangelog.com/>. Versioning follows [Semantic Versioning](http://semver.org/).
 
+## 2.2.0 - 2018-10-22
+
+### Added
+
+- Allow setting the yum download mirror with role variable `mariadb_mirror`
+- (GH-18) OracleLinux support (credit: [Vincenzo Castiglia](https://github.com/CastixGitHub))
+
+## 2.1.0 - 2018-08-29
+
+### Added
+
+- (GH-11) Allow default character set and collation to be configured (credit: Ripon Banik)
+- (GH-12) Added several server configuration variables for better performance. See `templates/etc_my.cnf.d_server.cnf.j2` (credit: Tom Stechele)
+- (GH-13) Allow the role to skip setting the swappiness of the mariadb process.
+- (GH-16) Allow user privileges to be added instead of overwritten (credit: Cédric Delgehier)
+- Allow custom configuration not specified in the template
+
+### Changed
+
+- (GH-13) Allow the role to skip setting the swappiness of the mariadb process
+- (GH-15) Allow `mariadb_service` to be overridden by the user
+- Bump default MariaDB version to 10.3, the current stable
+- Bump versions of supported platforms (EL 7, Fedora 28)
+- Fix MariaDB service name in handler
+
+### Removed
+
+- Deprecated variables `innodb_file_format_check`, `innodb_file_format`
+
 ## 2.0.2 - 2017-11-21
 
 ### Changed

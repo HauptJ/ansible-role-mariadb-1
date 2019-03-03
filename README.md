@@ -27,50 +27,57 @@ None of the variables below are required. When not defined by the user, the [def
 
 ### Basic configuration
 
-| Variable                | Default     | Comments                                                                                                    |
-|:------------------------|:------------|:------------------------------------------------------------------------------------------------------------|
-| `mariadb_bind_address`  | '127.0.0.1' | Set this to the IP address of the network interface to listen on, or '0.0.0.0' to listen on all interfaces. |
-| `mariadb_databases`     | []          | List of dicts specifyint the databases to be added. See below for details.                                  |
-| `mariadb_init_scripts`  | []          | List of dicts specifying any scripts to initialise the databases. Se below for details. ta                  |
-| `mariadb_port`          | 3306        | The port number used to listen to client requests                                                           |
-| `mariadb_root_password` | ''          | The MariaDB root password. **It is highly recommended to change this!**                                     |
-| `mariadb_swappiness`    | 0           | "Swappiness" value. System default is 60. A value of 0 means that swapping out processes is avoided.        |
-| `mariadb_users`         | []          | List of dicts specifying the users to be added. See below for details.                                      |
-| `mariadb_version`       | '10.2'      | The version of MariaDB to be installed. Default is the current stable release.                              |
+| Variable                       | Default         | Comments                                                                                                    |
+| :---                           | :---            | :---                                                                                                        |
+| `mariadb_bind_address`         | '127.0.0.1'     | Set this to the IP address of the network interface to listen on, or '0.0.0.0' to listen on all interfaces. |
+| `mariadb_configure_swappiness` | true            | When `true`, this role will set the "swappiness" value.                                                     |
+| `mariadb_custom_cnf`           | {}              | Dictionary with custom configuration.                                                                       |
+| `mariadb_databases`            | []              | List of dicts specifyint the databases to be added. See below for details.                                  |
+| `mariadb_init_scripts`         | []              | List of dicts specifying any scripts to initialise the databases. Se below for details. ta                  |
+| `mariadb_mirror`               | yum.mariadb.org | Download mirror for the .rpm package (1)                                                                    |
+| `mariadb_port`                 | 3306            | The port number used to listen to client requests                                                           |
+| `mariadb_root_password`        | ''              | The MariaDB root password. **It is highly recommended to change this!**                                     |
+| `mariadb_service  `            | mariadb         | Name of the service (should e.g. be 'mysql' on CentOS for MariaDB 5.5)                                      |
+| `mariadb_swappiness`           | 0               | "Swappiness" value. System default is 60. A value of 0 means that swapping out processes is avoided.        |
+| `mariadb_users`                | []              | List of dicts specifying the users to be added. See below for details.                                      |
+| `mariadb_version`              | '10.3'          | The version of MariaDB to be installed. Default is the current stable release.                              |
+
+(1) Installing MariaDB from the default yum repository can be very slow (e.g. >10 minutes). The variable `mariadb_mirror` allows you to specify a custom download mirror closer to your geographical location that may speed up the installation process. E.g.:
+
+```yaml
+mariadb_mirror: 'mariadb.mirror.nucleus.be/yum'
+```
 
 ### Server configuration
 
-The variables below are set in `/etc/my.cnf.d/server.cnf`, specifically in the `[mariadb]` section. For more info on the values, read the [MariaDB Server System Variables documentation](https://mariadb.com/kb/en/mariadb/server-system-variables/).
+This role supports setting several variables in `/etc/my.cnf.d/server.cnf`, specifically in the `[mariadb]` section. Repeating them all here, would clutter the documentation too much. Please refer to the [configuration file template](templates/etc_my.cnf.d_server.cnf.j2) for an overview of the variables that can be set. The default values can be found in <defaults/main.yml>. For more info on the values, read the [MariaDB Server System Variables documentation](https://mariadb.com/kb/en/mariadb/server-system-variables/).
 
-| Variable                                 | Default   | Comments                                                                                  |
-|:-----------------------------------------|:----------|:------------------------------------------------------------------------------------------|
-| `mariadb_innodb_buffer_pool_instances`   | 8         |                                                                                           |
-| `mariadb_innodb_buffer_pool_size`        | 384M      |                                                                                           |
-| `mariadb_innodb_file_format`             | Barracuda |                                                                                           |
-| `mariadb_innodb_file_format_check`       | 1         |                                                                                           |
-| `mariadb_innodb_file_per_table`          | ON        |                                                                                           |
-| `mariadb_innodb_flush_log_at_trx_commit` | 1         |                                                                                           |
-| `mariadb_innodb_log_buffer_size`         | 16M       |                                                                                           |
-| `mariadb_innodb_log_file_size`           | 48M       |                                                                                           |
-| `mariadb_innodb_strict_mode`             | ON        |                                                                                           |
-| `mariadb_join_buffer_size`               | 128K      |                                                                                           |
-| `mariadb_log_warnings`                   | 1         | Log critical warnings. Set to 0 to turn off, or greater than 1 for more verbose logging.  |
-| `mariadb_long_query_time`                | 10        |                                                                                           |
-| `mariadb_max_allowed_packet`             | 16M       |                                                                                           |
-| `mariadb_max_connections`                | 505       |                                                                                           |
-| `mariadb_max_heap_table_size`            | 16M       |                                                                                           |
-| `mariadb_max_user_connections`           | 500       |                                                                                           |
-| `mariadb_port`                           | 3306      |                                                                                           |
-| `mariadb_query_cache_size`               | 0         | The query cache is disabled by default. Set to a nonzero value to enable the query cache. |
-| `mariadb_read_buffer_size`               | 128K      |                                                                                           |
-| `mariadb_read_rnd_buffer_size`           | 256k      |                                                                                           |
-| `mariadb_skip_name_resolve`              | 1         | Use IP addresses only. Set to 0 to resolve host names.                                    |
-| `mariadb_slow_query_log`                 | 0         | Set to 1 to enable the slow query log.                                                    |
-| `mariadb_sort_buffer_size`               | 2M        |                                                                                           |
-| `mariadb_table_definition_cache`         | 1400      |                                                                                           |
-| `mariadb_table_open_cache`               | 2000      |                                                                                           |
-| `mariadb_table_open_cache_instances`     | 8         |                                                                                           |
-| `mariadb_tmp_table_size`                 | 16M       |                                                                                           |
+### Custom configuration
+
+Settings that aren't supported by the server.cnf template, can be set with `mariadb_custom_cnf`. These settings will be written to `/etc/mysql/my.cnf.d/custom.cnf`.
+
+`mariadb_custom_cnf` should be a dictionary. Keys are section names and values are dictionaries with key-value mappings for individual settings.
+
+The following example enables the general query log:
+
+```yaml
+mariadb_custom_cnf:
+  mysqld:
+    general-log:
+    general-log-file: queries.log
+    log-output: file
+```
+
+The resulting config file will look like this:
+
+```ini
+[mysqld]
+general-log-file=queries.log
+general-log
+log-output=file
+```
+
+Remark the setting `general-log` was left empty, so doesn't get `=value` in the config file.
 
 ### Adding databases
 
@@ -85,7 +92,9 @@ mariadb_databases:
 
 ### Adding users
 
-Users are defined with a dict containing fields `name:`, `password:`, `priv:`, and, optionally, `host:`. The password is in plain text and `priv:` specifies the privileges for this user as described in the [Ansible documentation](http://docs.ansible.com/mysql_user_module.html). An example:
+Users are defined with a dict containing fields `name:`, `password:`, `priv:`, and, optionally, `host:`, and `append_privs`. The password is in plain text and `priv:` specifies the privileges for this user as described in the [Ansible documentation](http://docs.ansible.com/mysql_user_module.html).
+
+An example:
 
 ```Yaml
 mariadb_users:
@@ -95,6 +104,7 @@ mariadb_users:
   - name: jack
     password: sekrit
     priv: 'jacksdb.*:ALL'
+    append_privs: 'yes'
     host: '192.168.56.%'
 ```
 
@@ -125,6 +135,10 @@ Pull requests are also very welcome. Please create a topic branch for your propo
 
 - [Barry Britt](https://github.com/raznikk)
 - [Bert Van Vreckem](https://github.com/bertvv/) (Maintainer)
+- [Cédric Delgehier](https://github.com/cdelgehier)
 - [Louis Tournayre](https://github.com/louiznk)
 - [@piuma](https://github.com/piuma)
+- [Ripon Banik](https://github.com/riponbanik)
 - [Thomas Eylenbosch](https://github.com/EylenboschThomas)
+- [Tom Stechele](https://github.com/tomstechele)
+- [Vincenzo Castiglia](https://github.com/CastixGitHub)
